@@ -25,7 +25,7 @@ public:
         num = num / p;
         denom = denom / p;
     }
-    operator float() const // float(r) renvoie la valeur de la fraction
+    operator float() const // float(r) ou r.operator float() renvoie la valeur de la fraction
     {
         return static_cast<float>(num) / denom;
     }
