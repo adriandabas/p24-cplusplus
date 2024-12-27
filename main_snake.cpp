@@ -11,9 +11,10 @@ void print_message(const std::string &msg)
     std::cout << msg;
 }
 
-void print(const std::vector<std::vector<char>> tbl) // affiche la board
+void print(const std::vector<std::vector<char>> &tbl)
+// affiche la board
 {
-    for (std::vector<char> i : tbl)
+    for (const std::vector<char> &i : tbl)
     {
         for (char j : i)
         {
@@ -25,7 +26,21 @@ void print(const std::vector<std::vector<char>> tbl) // affiche la board
 
 void reset_board(std::vector<std::vector<char>> &tbl)
 {
-    tbl = std::vector<std::vector<char>>(rows, std::vector<char>(columns, '.'));
+    // soit en le parcourant élément par élément
+    for (std::vector<char> &i : tbl)
+    {
+        for (char &j : i) // la référence permet de modifier l'élément référencé par j
+        {
+            j = '.';
+        }
+    }
+    // soit en utilisant std::fill sur les sous-vecteurs
+    /*
+    for (std::vector<char> &i : tbl)
+    {
+        std::fill(i.begin(), i.end(), '.');
+    }
+    */
 }
 
 void add_snake_to_board(std::vector<std::vector<char>> &tbl, const std::vector<std::vector<int>> &snake)
@@ -43,7 +58,7 @@ void generate_apple(std::vector<int> &p, const std::vector<std::vector<int>> sna
     int cpt{};
     while (cpt <= snake.size()) // pour que la pomme n'apparaisse pas sur le serpent
     {
-        for (std::vector<int> coord : snake)
+        for (const std::vector<int> &coord : snake)
         {
             if (p == coord)
             {
@@ -85,124 +100,50 @@ void play_game(std::vector<std::vector<char>> &board, std::vector<int> &apple, s
                 {
                     ny = snake[0][0] - 1;
                     nx = snake[0][1];
-                    np = {ny, nx};
-                    last = snake[snake.size() - 1];
-                    if (nx < 0 or nx > columns - 1 or ny < 0 or ny > rows - 1) // si on sort du board
-                    {
-                        print_message("bye bye !\n");
-                        exit(0);
-                    }
-                    for (std::vector<int> coord : snake) // si on se mange
-                    {
-                        if (np == coord)
-                        {
-                            print_message("bye bye!\n");
-                            exit(0);
-                        }
-                    }
-                    for (int k = snake.size() - 1; k > 0; k--) // on deplace le snake
-                    {
-                        snake[k] = snake[k - 1];
-                    }
-                    snake[0] = np;
-                    if (np == apple) // on mange une pomme
-                    {
-                        snake.push_back(last);
-                        generate_apple(apple, snake);
-                    }
                 }
-
-                if (key == 'k')
+                else if (key == 'k')
                 {
                     ny = snake[0][0] + 1;
                     nx = snake[0][1];
-                    np = {ny, nx};
-                    last = snake[snake.size() - 1];
-                    if (nx < 0 or nx > columns - 1 or ny < 0 or ny > rows - 1)
-                    {
-                        print_message("bye bye !\n");
-                        exit(0);
-                    }
-                    for (std::vector<int> coord : snake)
-                    {
-                        if (np == coord)
-                        {
-                            print_message("bye bye!\n");
-                            exit(0);
-                        }
-                    }
-                    for (int k = snake.size() - 1; k > 0; k--)
-                    {
-                        snake[k] = snake[k - 1];
-                    }
-                    snake[0] = np;
-                    if (np == apple) // on mange une pomme
-                    {
-                        snake.push_back(last);
-                        generate_apple(apple, snake);
-                    }
                 }
-
-                if (key == 'j')
+                else if (key == 'j')
                 {
                     ny = snake[0][0];
                     nx = snake[0][1] - 1;
-                    np = {ny, nx};
-                    last = snake[snake.size() - 1];
-                    if (nx < 0 or nx > columns - 1 or ny < 0 or ny > rows - 1)
-                    {
-                        print_message("bye bye !\n");
-                        exit(0);
-                    }
-                    for (std::vector<int> coord : snake)
-                    {
-                        if (np == coord)
-                        {
-                            print_message("bye bye!\n");
-                            exit(0);
-                        }
-                    }
-                    for (int k = snake.size() - 1; k > 0; k--)
-                    {
-                        snake[k] = snake[k - 1];
-                    }
-                    snake[0] = np;
-                    if (np == apple) // on mange une pomme
-                    {
-                        snake.push_back(last);
-                        generate_apple(apple, snake);
-                    }
                 }
-
-                if (key == 'l')
+                else if (key == 'l')
                 {
                     ny = snake[0][0];
                     nx = snake[0][1] + 1;
-                    np = {ny, nx};
-                    last = snake[snake.size() - 1];
-                    if (nx < 0 or nx > columns - 1 or ny < 0 or ny > rows - 1)
+                }
+                // même code à faire dans tous les cas
+                np = {ny, nx};
+                last = snake[snake.size() - 1];
+                if (nx < 0 or nx > columns - 1 or ny < 0 or ny > rows - 1)
+                {
+                    print_message("game over !\n");
+                    exit(0);
+                }
+                for (std::vector<int> &coord : snake)
+                {
+                    if (np == coord)
                     {
-                        print_message("bye bye !\n");
+                        print_message("game over !\n");
                         exit(0);
                     }
-                    for (std::vector<int> coord : snake)
-                    {
-                        if (np == coord)
-                        {
-                            print_message("bye bye!\n");
-                            exit(0);
-                        }
-                    }
-                    for (int k = snake.size() - 1; k > 0; k--)
-                    {
-                        snake[k] = snake[k - 1];
-                    }
-                    snake[0] = np;
-                    if (np == apple) // on mange une pomme
-                    {
-                        snake.push_back(last);
-                        generate_apple(apple, snake);
-                    }
+                }
+                // vr: éviter de bouger si le serpent mange la pomme
+                // et simplement ajouter une case pour la tête en mettant np dedans
+                // vr: il faudrait faire une serpent avec la tête à size-1
+                for (int k = snake.size() - 1; k > 0; k--)
+                {
+                    snake[k] = snake[k - 1];
+                }
+                snake[0] = np;
+                if (np == apple) // on mange une pomme
+                {
+                    snake.push_back(last);
+                    generate_apple(apple, snake);
                 }
             }
             else if (key == 'q')
@@ -217,7 +158,7 @@ void play_game(std::vector<std::vector<char>> &board, std::vector<int> &apple, s
 int main()
 {
     // INITIALISATION
-    std::vector<std::vector<char>> board; // creation d'un element board
+    std::vector<std::vector<char>> board(rows, std::vector<char>(columns, '.'));
 
     int i{rows / 2}; // initialisation d'un serpent
     int j{columns / 2 - 1};
