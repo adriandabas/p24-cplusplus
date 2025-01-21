@@ -16,14 +16,14 @@ public:
         x = newX;
         y = newY;
     }
-    bool is_at_position(int x1, int y1) const
+    bool is_at_position(int x1, int y1) const // on pourrait regarder dans une zone autour de (x1,y1). Pour cela, on devrait définir la méthode dans la classe Square, par exemple, et indiquer virtual.
     {
         return (x1 == x) and (y1 == y);
     }
 
     // virtual : if you want the compiler to call the function Square::area() (for instance)
     // when objects of type Square have been upcasted (perte d'information) in objects of type Shape*
-    virtual float area() const { return 0; }
+    virtual float area() const = 0; // la méthode n'est ici pas bien définie (méthode abstraite : =0) : on ne peut plus créer d'objet juste de type Shape. Pour s'assurer que personne ne crée d'objet de type juste Shape, on peut mettre le constructeur de shape en protected.
 };
 
 class Square : public Shape
@@ -33,7 +33,7 @@ private:
 
 public:
     Square(int x, int y, int c, float s) : Shape(x, y, c), side(s) {}
-    float area() const
+    float area() const // on peut remettre virtual ici. On peut aussi indique "override" pour dire qu'on redef une méthode héritée de shape.
     {
         return side * side;
     }
@@ -80,7 +80,7 @@ Shape *find_at_position(int x, int y, std::vector<Shape *> const &shapes)
             return e;
         }
     }
-    return nullptr;
+    return nullptr; // pointeur nul vers un objet de type Shape*
 }
 
 int main()
@@ -106,7 +106,10 @@ int main()
     std::cout << shape1->area() << std::endl;
     Shape *shape2 = find_at_position(100, 200, shapes);
     // pouvez vous appeler la méthode move et area sur shape2 ? l'exécution des deux lignes suivantes renvoie une erreur
-    // shape2->move(2, 8);
-    // std::cout << shape2->area() << std::endl;
+    if (shape2 != nullptr) // si on n'a pas trouvé d'objet à cette position, l'appel d'une méthode sur nullptr renvoie une erreur
+    {
+        shape2->move(2, 8);
+        std::cout << shape2->area() << std::endl;
+    }
     return 0;
 }
