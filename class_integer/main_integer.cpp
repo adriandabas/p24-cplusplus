@@ -1,4 +1,4 @@
-#include "class_integer.h"
+#include "integer.h"
 
 int main()
 {
