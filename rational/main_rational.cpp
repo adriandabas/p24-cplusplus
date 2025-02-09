@@ -5,7 +5,7 @@ int main()
 {
     Rational r1;
     Rational r2(1);
-    Rational r3(4, 0);
+    Rational r3(4, 6);
     Rational r4(1, 2);
     Rational r5 = r3 + r4;
     std::cout << r1 << ' ' << r2 << std::endl;
