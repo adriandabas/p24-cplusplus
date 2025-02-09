@@ -1,5 +1,5 @@
 #include <iostream>
-#include "intstack_simple.h"
+#include "intstack_staticsize.h"
 
 int main()
 {
