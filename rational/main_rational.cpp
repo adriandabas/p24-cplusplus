@@ -1,5 +1,5 @@
 #include <iostream>
-#include "class_rational.h"
+#include "rational.h"
 
 int main()
 {
